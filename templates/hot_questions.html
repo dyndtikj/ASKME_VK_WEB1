@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %} Hot {% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-6">
+            <h2 class="my-header">Hot question</h2>
+        </div>
+        <div class="col-6">
+            <h2><a href="{% url 'index' %}" class="tags-text">New questions</a></h2>
+        </div>
+    </div>
+
+    {% for question in questions %}
+        {% include 'include/question_item.html' %}
+    {% endfor %}
+
+    {% include 'include/paginator.html'%}
+{% endblock %}

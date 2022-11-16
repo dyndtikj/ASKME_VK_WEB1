@@ -1,0 +1,29 @@
+{% load static %}
+<div class="answer">
+    <div class="row">
+        <div class="col-3">
+            <div class="my-header font-20">
+                {{ answer.profile_id }}
+            </div>
+            <div class="text-center ">
+                <img class="question-avatar" src={% static "avatar/" %}{{ answer.profile_id.avatar }} alt=avatar>
+            </div>
+            <div class="like-dislike mx-auto align-center">
+                <div class="like-counter text-center ">{{ answer.rating }}</div>
+                <div class="btn-group " role="group">
+                    <button type="button" class="btn my-btn border-2">+</button>
+                    <button type="button" class="btn my-btn border-2">-</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <p class="font-20 align-middle answer-text">
+                {{ answer.text }}
+            </p>
+            <div class="under-question form-check answer-text">
+                <input type="checkbox" class="form-check-input my-checkbox" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Correct!</label>
+            </div>
+        </div>
+    </div>
+</div>
