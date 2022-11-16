@@ -11,8 +11,8 @@
             </div>
             <div class="col-10">
                 <input type="text" class="form-control is-valid m-0" id="question" name="new_question"
-                       placeholder="Your question title"
-                       title="latin, not empty" pattern="^(\s*[\w\p{P}]+\s*)+$"
+                       placeholder="Your question title" maxlength="100"
+                       title="latin, not empty, max 100" pattern="^(\s*[\w\p{P}]+\s*)+$"
                        required>
             </div>
         </div>
@@ -22,8 +22,8 @@
             </div>
             <div class="col-10">
                 <textarea class="form-control m-0 is-invalid" id="question-body" name="new_question_body"
-                          placeholder="Your question"
-                          title="not empty" required></textarea>
+                          placeholder="Your question" maxlength="400"
+                          title="not empty, max - 400" required></textarea>
             </div>
         </div>
         <div class="row mt-5">
@@ -32,8 +32,8 @@
             </div>
             <div class="col-10">
                 <input type="text" class="form-control is-valid m-0" name="Tags" id="tags-input"
-                       placeholder="Tag1 Tag2"
-                       title="latin, letter in tag required, symbols allowed '-' '_', not empty" pattern="^(\s*[a-zA-Z]+[\w\-\d]*\s*)+$"
+                       placeholder="Tag1 Tag2" maxlength="200"
+                       title="latin, letter in tag required, 200 - max,  symbols allowed '-' '_', not empty" pattern="^(\s*[a-zA-Z]+[\w\-\d]*\s*)+$"
                        required>
             </div>
         </div>
