@@ -6,4 +6,4 @@
 
 [Репозиторий с условием домашнего задания](https://github.com/ziontab/tp-tasks)
 
-python manage.py generate --ration=10
+python manage.py generate --ratio=10
