@@ -178,30 +178,6 @@ class LikeQuestion(models.Model):
         super(LikeQuestion, self).save(*args, **kwargs)
         return self.question_id.rating
 
-    def delete(self, *args, **kwargs):
-        if self.is_like:
-            self.question_id.likes_count -= 1
-            self.question_id.rating -= 1
-        else:
-            self.question_id.dislikes_count -= 1
-            self.question_id.rating += 1
-        self.question_id.save()
-        super(LikeQuestion, self).delete(*args, **kwargs)
-        return self.question_id.rating
-
-    def change_mind(self):
-        if self.is_like:
-            self.question_id.likes_count -= 1
-            self.question_id.dislikes_count += 1
-            self.question_id.rating -= 2
-        else:
-            self.question_id.likes_count += 1
-            self.question_id.dislikes_count -= 1
-            self.question_id.rating += 2
-        self.is_like = not self.is_like
-        self.save()
-        self.question_id.save()
-        return self.question_id.rating
     class Meta:
         unique_together = ('question_id', 'profile_id')
         verbose_name = 'Question like'
@@ -242,19 +218,6 @@ class LikeAnswer(models.Model):
         super(LikeAnswer, self).delete(*args, **kwargs)
         return self.answer_id.rating
 
-    def change_mind(self):
-        if self.is_like:
-            self.answer_id.likes_count -= 1
-            self.answer_id.dislikes_count += 1
-            self.answer_id.rating -= 2
-        else:
-            self.answer_id.likes_count += 1
-            self.answer_id.dislikes_count -= 1
-            self.answer_id.rating += 2
-        self.is_like = not self.is_like
-        self.save()
-        self.answer_id.save()
-        return self.answer_id.rating
 
     class Meta:
         unique_together = ('answer_id', 'profile_id')
