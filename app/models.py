@@ -83,9 +83,9 @@ class QuestionManager(models.Manager):
 
 class Question(models.Model):
     profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Author')
-    title = models.CharField(max_length=1024, verbose_name='Title')
-    text = models.TextField(verbose_name='Text')
-    tags = models.ManyToManyField(Tag, verbose_name='Tags')
+    title = models.CharField(max_length=100, verbose_name='Title')
+    text = models.TextField(max_length=1000, verbose_name='Text')
+    tags = models.ManyToManyField(Tag,max_length=200, verbose_name='Tags')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Creation time')
     number_of_answers = models.IntegerField(default=0, verbose_name='Answer count')
     rating = models.IntegerField(default=0, verbose_name='Rating')
@@ -123,7 +123,7 @@ class AnswerManager(models.Manager):
 class Answer(models.Model):
     profile_id = models.ForeignKey('Profile', on_delete=models.CASCADE, verbose_name='Author')
     question_id = models.ForeignKey('Question', on_delete=models.CASCADE, verbose_name='Question')
-    text = models.TextField(verbose_name='Text')
+    text = models.TextField(max_length=1000, verbose_name='Text')
     is_correct = models.BooleanField(default=False, verbose_name='Is correct')
     date_create = models.DateTimeField(auto_now_add=True, verbose_name='Creation time')
     rating = models.IntegerField(default=0, verbose_name='Rating')
