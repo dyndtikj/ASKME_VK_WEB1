@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} New {% endblock %}
+
+{% block content %}
+
+    <h2 class="my-header">New question</h2>
+    <form class="was-validated row question-form">
+        <div class="row mt-5">
+            <div class="col-2 text-end">
+                <label for="question mt-5 " class="my-header font-">Title</label>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control is-valid m-0" id="question" name="new_question"
+                       placeholder="Your question title"
+                       title="latin, not empty" pattern="^(\s*[\w\p{P}]+\s*)+$"
+                       required>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-2 text-end">
+                <label for="question-body" class="my-header font-20 ">Text</label>
+            </div>
+            <div class="col-10">
+                <textarea class="form-control m-0 is-invalid" id="question-body" name="new_question_body"
+                          placeholder="Your question"
+                          title="not empty" required></textarea>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-2 text-end">
+                <label for="tags-input mt-5 " class="my-header font-20 ">Tags</label>
+            </div>
+            <div class="col-10">
+                <input type="text" class="form-control is-valid m-0" name="Tags" id="tags-input"
+                       placeholder="Tag1 Tag2"
+                       title="latin, letter in tag required, symbols allowed '-' '_', not empty" pattern="^(\s*[a-zA-Z]+[\w\-\d]*\s*)+$"
+                       required>
+            </div>
+        </div>
+        <button class="btn my-btn link w-25 m-3 mx-auto border-3" type="submit">Ask!</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>AskMe</title>
+    <link rel="icon" type="image/png" href="{% static "img/favicon/index.png" %}">
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/my.css" %}" rel="stylesheet">
+</head>
+
+<body>
+{% include 'include/navbar.html' %}
+
+<main class="flex-shrink-0">
+    <div class="container " id="main_structure">
+        <div class="row">
+            <div class="col-8">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+            <div class="col-4">
+                <div>
+                    {% include 'include/popular_tags.html' %}
+                </div>
+                <div class="mgt-50">
+                    {% include 'include/best_members.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+<footer class="footer mt-auto py-3">
+    {% include 'include/footer.html' %}
+</footer>
+</html>

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Settings {% endblock %}
+{% block content %}
+    <h2 class="my-header">Settings</h2>
+    <form class="was-validated row question-form col-10 mx-auto">
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+                <input type="email" class="form-control" name="email" maxlength="50" id="email-input"
+                       placeholder="example@mail.ru" value={{ user.email }}>
+                <label for="email-input">Email address</label>
+            </div>
+        </div>
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+                <input type="text" class="form-control" name="nick" maxlength="100" id="nick-input"
+                       placeholder="Nick_1" pattern="^\w+$" value="{{ user.nick }}">
+                <label for="nick-input">NickName</label>
+            </div>
+        </div>
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+                <input type="password" name="password" maxlength="100" class="form-control" id="password-input"
+                       placeholder="Password" pattern="^(?=.*\d)(?=.*[A-Z]).{6,}$">
+                <label for="password-input">Password</label>
+            </div>
+        </div>
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+                <input type="password" name="password-mach" maxlength="100" class="form-control"
+                       id="password-match-input" placeholder="Password" pattern="^(?=.*\d)(?=.*[A-Z]).{6,}$">
+                <label for="password-mach-input">Repeat password</label>
+            </div>
+        </div>}
+        <div class="row mt-3 mx-auto">
+            <label class="font-20 answer-text">Upload picture:</label>
+        </div>
+        <div class="text-center">
+                <img class="question-avatar" src="{% static "img/ava.png" %}" alt=avatar>
+        </div>
+        <div class="row mt-3 mx-auto">
+            <div class="form-row">
+                 <input type="file" class="form-control-file" id="avatar_uploader">
+            </div>
+        </div>
+        <div class="row mx-auto">
+            <button class="btn btn-success btn-lg" type="submit">Save</button>
+        </div>
+    </form>
+
+{% endblock %}

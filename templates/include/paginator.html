@@ -1,0 +1,22 @@
+<nav aria-label="pages">
+    <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <div class="pagination">
+            {% if paginated_elements.has_previous %}
+                <a class="page-item btn my-btn border-radius-5 border-0 mb-3" href="?page=1"> 1</a>
+                <a class="page-item btn my-btn border-radius-5 border-0 mb-3" href="?page={{ paginated_elements.previous_page_number }}"> &laquo; </a>
+            {% endif %}
+
+            <a class="page-item btn my-btn border-radius-5 border-0 mb-3"  href="#">{{ paginated_elements.number }}</a>
+
+            {% if paginated_elements.has_next %}
+                <a class="page-item btn my-btn border-radius-5 border-0 mb-3" href="?page={{ paginated_elements.next_page_number }}">&raquo;</a>
+                <a class="page-item btn my-btn border-radius-5 border-0 mb-3" href="?page={{ paginated_elements.paginator.num_pages }}">{{ paginated_elements.paginator.num_pages }}</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-4"></div>
+    </div>
+</nav>
+
