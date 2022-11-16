@@ -2,19 +2,6 @@
 <div class="answer">
     <div class="row">
         <div class="col-3">
-{#            <div class="my-header font-20">#}
-{#                {{ answer.author }}#}
-{#            </div>#}
-{#            <div class="text-center ">#}
-{#                <img class="question-avatar"  src="{% static "img/ava.png" %}" alt="avatar">#}
-{#            </div>#}
-{#            <div class="like-dislike w-75 mx-auto">#}
-{#                <div class="btn-group " role="group">#}
-{#                    <button type="button" class="btn my-btn border-2">+</button>#}
-{#                    <button type="button" class="btn my-btn border-2">-</button>#}
-{#                </div>#}
-{#                <div class="like-counter text-center ">{{ answer.like_count }}</div>#}
-{#            </div>#}
             <div class="my-header font-20">
                 {{ question.author }}
             </div>
@@ -24,8 +11,8 @@
             <div class="like-dislike mx-auto align-center">
                 <div class="like-counter text-center ">{{ question.like_count }}</div>
                 <div class="btn-group " role="group">
-                    <button type="button" class="btn my-btn border-2">+</button>
-                    <button type="button" class="btn my-btn border-2">-</button>
+                    <button type="button" class="btn my-btn border-2 text-black">+</button>
+                    <button type="button" class="btn my-btn border-2 text-black">-</button>
                 </div>
             </div>
         </div>
