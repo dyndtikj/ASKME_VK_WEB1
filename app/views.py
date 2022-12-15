@@ -1,13 +1,15 @@
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.http import require_GET
-
-from app.models import *
-from app.forms import *
-from django.urls import reverse
+from django.core.paginator import Paginator
+from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.urls import resolve
+from django.views.decorators.http import require_GET, require_POST
 
+from app.forms import *
+from app.models import *
+
+best_members = Profile.objects.sample_profile(count=20)
 
 def paginate(objects_list, request, limit):
     paginator = Paginator(objects_list, limit)
@@ -190,3 +192,29 @@ def ask(request):
         'popular_tags': popular_tags,
         'best_members': best_members,
     })
+
+
+class HttpResponseAjax(JsonResponse):
+    def __init__(self, status='ok', **kwargs):
+        kwargs['status'] = status
+        super().__init__(kwargs)
+
+
+class HttpResponseAjaxError(HttpResponseAjax):
+    def __init__(self, code, message):
+        super().__init__(
+            status='error', code=code, message=message
+        )
+
+
+def login_required_ajax(view):
+    def view2(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view(request, *args, **kwargs)
+        elif request.is_ajax():
+            return HttpResponseAjaxError(
+                code="no_auth",
+                message=u'Login required',
+            )
+
+    return view2
