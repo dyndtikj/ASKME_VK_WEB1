@@ -11,6 +11,31 @@ from app.models import *
 
 best_members = Profile.objects.sample_profile(count=20)
 
+class HttpResponseAjax(JsonResponse):
+    def __init__(self, status='ok', **kwargs):
+        kwargs['status'] = status
+        super().__init__(kwargs)
+
+
+class HttpResponseAjaxError(HttpResponseAjax):
+    def __init__(self, code, message):
+        super().__init__(
+            status='error', code=code, message=message
+        )
+
+
+def login_required_ajax(view):
+    def view2(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view(request, *args, **kwargs)
+        elif request.is_ajax():
+            return HttpResponseAjaxError(
+                code="no_auth",
+                message=u'Login required',
+            )
+
+    return view2
+
 def paginate(objects_list, request, limit):
     paginator = Paginator(objects_list, limit)
     return paginator.get_page(request.GET.get('page'))
@@ -20,7 +45,7 @@ def paginate(objects_list, request, limit):
 def new_questions(request):
     curr_questions = paginate(Question.objects.all(), request, 5)
     popular_tags = Tag.objects.popular_tags()
-    best_members = Profile.objects.sample_profile(count=15)
+    # best_members = Profile.objects.sample_profile(count=15)
     return render(request, 'index.html', {'questions': curr_questions,
                                           'paginated_elements': curr_questions,
                                           'popular_tags':  popular_tags,
@@ -33,7 +58,7 @@ def new_questions(request):
 def hot_questions(request):
     curr_questions = paginate(Question.objects.hot(), request, 5)
     popular_tags = Tag.objects.popular_tags()
-    best_members = Profile.objects.sample_profile(count=20)
+    # best_members = Profile.objects.sample_profile(count=20)
     return render(request, 'hot_questions.html', {'questions': curr_questions,
                                                   'paginated_elements': curr_questions,
                                                   'popular_tags':  popular_tags,
@@ -47,7 +72,7 @@ def questions_by_tag(request, tag_name):
     tag = get_object_or_404(Tag, tag=tag_name)
     curr_questions = paginate(Question.objects.by_tag(tag_name), request, 5)
     popular_tags = Tag.objects.popular_tags()
-    best_members = Profile.objects.sample_profile(count=20)
+    # best_members = Profile.objects.sample_profile(count=20)
     return render(request, 'questions_by_tag.html', {'questions': curr_questions,
                                                      'popular_tags': popular_tags,
                                                      'best_members': best_members,
@@ -90,11 +115,10 @@ def question(request, question_id):
 
 
 def signup(request):
-    print('________________________________________')
     print(request.GET)
     print(request.POST)
     popular_tags = Tag.objects.popular_tags()
-    best_members = Profile.objects.sample_profile(count=20)
+    # best_members = Profile.objects.sample_profile(count=20)
     if request.method == 'GET':
         form = SignupForm()
     else:
@@ -124,7 +148,7 @@ def login(request):
 
     if request.method == 'GET':
         form = LoginForm()
-    elif request.method == 'POST':
+    else: #request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid():
             user = auth.authenticate(**form.cleaned_data)
@@ -194,27 +218,76 @@ def ask(request):
     })
 
 
-class HttpResponseAjax(JsonResponse):
-    def __init__(self, status='ok', **kwargs):
-        kwargs['status'] = status
-        super().__init__(kwargs)
+@login_required_ajax
+@require_POST
+def answer_correct(request):
+    print(request.POST)
+    try:
+        answer_id = request.POST['id']
+        answer = Answer.objects.get(id=answer_id)
+        if answer.question_id.profile_id == request.user.profile:
+            answer.change_mind_correct()
+            answer.save()
+            # return HttpResponseAjax(id=answer_id)
+            return HttpResponseAjax()
+    except Answer.DoesNotExist:
+        return HttpResponseAjaxError(code='bad_params', message='this answer is in an invalid state or does not exist')
+
+    return HttpResponseAjaxError(code='bad_params', message='this answer is in an invalid state or does not exist')
 
 
-class HttpResponseAjaxError(HttpResponseAjax):
-    def __init__(self, code, message):
-        super().__init__(
-            status='error', code=code, message=message
-        )
+@login_required_ajax
+@require_POST
+def question_vote(request):
+    print(request.POST)
+    if request.POST['action'] == "like":
+        action = True
+    else:
+        action = False
+    try:
+        like = LikeQuestion.objects.get(profile_id=request.user.profile,
+                                        question_id=Question.objects.get(id=request.POST['id']))
 
+        if like.is_like == action:
+            return HttpResponseAjax(new_rating=like.delete())
 
-def login_required_ajax(view):
-    def view2(request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return view(request, *args, **kwargs)
-        elif request.is_ajax():
-            return HttpResponseAjaxError(
-                code="no_auth",
-                message=u'Login required',
-            )
+        like.change_mind()
+        like.save()
+        return HttpResponseAjax(new_rating=Question.objects.get(id=request.POST['id']).rating)
 
-    return view2
+    except LikeQuestion.DoesNotExist:
+        like = LikeQuestion.objects.create(profile_id=request.user.profile,
+                                           question_id=Question.objects.get(id=request.POST['id']),
+                                           is_like=action)
+        like.save()
+        return HttpResponseAjax(new_rating=Question.objects.get(id=request.POST['id']).rating)
+    except LikeQuestion.MultipleObjectsReturned:
+        return HttpResponseAjaxError(code='bad_params', message='Something is wrong with request. You can try again!')
+
+@login_required_ajax
+@require_POST
+def answer_vote(request):
+    print(request.POST)
+    if request.POST['action'] == "like":
+        action = True
+    else:
+        action = False
+    try:
+        like = LikeAnswer.objects.get(profile_id=request.user.profile,
+                                      answer_id=Answer.objects.get(id=request.POST['id']))
+
+        if like.is_like == action:
+            return HttpResponseAjax(new_rating=like.delete())
+
+        like.change_mind()
+        like.save()
+        return HttpResponseAjax(new_rating=Answer.objects.get(id=request.POST['id']).rating)
+
+    except LikeAnswer.DoesNotExist:
+        like = LikeAnswer.objects.create(profile_id=request.user.profile,
+                                         answer_id=Answer.objects.get(id=request.POST['id']),
+                                         is_like=action)
+        like.save()
+        return HttpResponseAjax(new_rating=Answer.objects.get(id=request.POST['id']).rating)
+    except LikeAnswer.MultipleObjectsReturned:
+        return HttpResponseAjaxError(code='bad_params', message='Something is wrong with request. You can try again!')

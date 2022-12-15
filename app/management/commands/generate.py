@@ -68,7 +68,7 @@ class Command(BaseCommand):
         for j in range(0, len(temp_data_user)):
             temp_data_profile.append(Profile(
                 user_id=u[j],
-                avatar="ava" + str(j % avatar_count) + ".png",
+                avatar="img/ava" + str(j % avatar_count) + ".png",
             ))
 
         Profile.objects.bulk_create(temp_data_profile, batch_size=profile_count)
