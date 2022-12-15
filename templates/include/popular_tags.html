@@ -2,6 +2,7 @@
 <h2 class="my-header">Popular Tags</h2>
 <div class="tags-holder">
     {% for tag in popular_tags %}
-        <a class="topic_tag tag topic_tag{{ forloop.counter0 |mod:12}}" href="{% url 'questions_by_tag' tag %}">{{ tag }}</a>
+        <a class="topic_tag tag topic_tag{{ forloop.counter0 |mod:12}}" href="{{ tag.get_url }}">{{ tag }}</a>
+<!--        <a class="topic_tag tag topic_tag{{ forloop.counter0 |mod:12}}" href="{% url 'questions_by_tag' tag %}">{{ tag }}</a>-->
     {% endfor %}
 </div>

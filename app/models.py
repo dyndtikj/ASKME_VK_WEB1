@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from random import sample
 from django.http import Http404
+from django.urls import reverse
 
 
 class ProfileManager(models.Manager):
@@ -23,7 +24,7 @@ class Profile(models.Model):
         verbose_name='Profile')
     avatar = models.ImageField(
         default='uploads/avatar/ava.png',
-        upload_to='static/avatar/',
+        upload_to='uploads/avatar/%y/%m/%d',
         verbose_name='Avatar')
     objects = ProfileManager()
 
@@ -54,6 +55,9 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.tag
+
+    def get_url(self):
+        return reverse('questions_by_tag', kwargs={'tag_name': self.tag})
 
     class Meta:
         verbose_name = 'Tag'
@@ -99,6 +103,9 @@ class Question(models.Model):
 
     def get_tags(self):
         return self.tags
+
+    def get_url(self):
+        return reverse('question', kwargs={'question_id': self.id})
 
     class Meta:
         verbose_name = 'Question'
@@ -166,6 +173,17 @@ class LikeQuestion(models.Model):
             action = 'Liked'
         return self.profile_id.user_id.get_username() + ' ' + action + ' "' + self.question_id.title + '"'
 
+    def delete(self, *args, **kwargs):
+        if self.is_like:
+            self.question_id.likes_count -= 1
+            self.question_id.rating -= 1
+        else:
+            self.question_id.dislikes_count -= 1
+            self.question_id.rating += 1
+        self.question_id.save()
+        super(LikeQuestion, self).delete(*args, **kwargs)
+        return self.question_id.rating
+
     def save(self, *args, **kwargs):
         if not self.pk:
             if self.is_like:
@@ -216,6 +234,20 @@ class LikeAnswer(models.Model):
             self.answer_id.rating += 1
         self.answer_id.save()
         super(LikeAnswer, self).delete(*args, **kwargs)
+        return self.answer_id.rating
+
+    def change_mind(self):
+        if self.is_like:
+            self.answer_id.likes_count -= 1
+            self.answer_id.dislikes_count += 1
+            self.answer_id.rating -= 2
+        else:
+            self.answer_id.likes_count += 1
+            self.answer_id.dislikes_count -= 1
+            self.answer_id.rating += 2
+        self.is_like = not self.is_like
+        self.save()
+        self.answer_id.save()
         return self.answer_id.rating
 
 

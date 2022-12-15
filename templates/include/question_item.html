@@ -6,7 +6,7 @@
                 {{ question.profile_id}}
             </div>
             <div class="text-center ">
-                <img class="question-avatar" src={% static "avatar/" %}{{ question.profile_id.avatar }}  alt=avatar>
+                <img class="question-avatar" src={{ question.profile_id.avatar.url }} alt=avatar>
             </div>
             <div class="like-dislike mx-auto align-center">
                 <div class="like-counter text-center ">{{ question.rating }}</div>

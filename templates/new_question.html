@@ -1,42 +1,64 @@
 {% extends 'base.html' %}
 {% block title %} New {% endblock %}
-
+{% load bootstrap4 %}
 {% block content %}
 
     <h2 class="my-header">New question</h2>
-    <form class="was-validated row question-form">
+    <form class="was-validated row question-form" action="{% url 'ask' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="row mt-5">
             <div class="col-2 text-end">
-                <label for="question" class="my-header">Title</label>
+                <label for="{{ form.title.id_for_label }}" class="my-header">Title</label>
+<!--                <label for="question" class="my-header">Title</label>-->
             </div>
             <div class="col-10">
-                <input type="text" class="form-control is-valid m-0" id="question" name="new_question"
-                       placeholder="Your question title" maxlength="100"
-                       title="latin, not empty, max 100" pattern="^(\s*[\w\p{P}]+\s*)+$"
-                       required>
+                {{ form.title }}
+<!--                <input type="text" class="form-control is-valid m-0" id="question" name="new_question"-->
+<!--                       placeholder="Your question title" maxlength="100"-->
+<!--                       title="latin, not empty, max 100" pattern="^(\s*[\w\p{P}]+\s*)+$"-->
+<!--                       required>-->
             </div>
         </div>
         <div class="row mt-5">
             <div class="col-2 text-end">
-                <label for="question-body" class="my-header font-20 ">Text</label>
+                <label for="{{ form.text.id_for_label }}" class="my-header font-20 ">Text</label>
             </div>
             <div class="col-10">
-                <textarea class="form-control m-0 is-invalid" id="question-body" name="new_question_body"
-                          placeholder="Your question" maxlength="1000"
-                          title="not empty, max - 1000" required></textarea>
+                {{ form.text }}
+<!--                <textarea class="form-control m-0 is-invalid" id="question-body" name="new_question_body"-->
+<!--                          placeholder="Your question" maxlength="1000"-->
+<!--                          title="not empty, max - 1000" required></textarea>-->
             </div>
         </div>
         <div class="row mt-5">
             <div class="col-2 text-end">
-                <label for="tags-input" class="my-header font-20 ">Tags</label>
+                <label for="{{ form.tags.id_for_label }}"    class="my-header font-20 ">Tags</label>
             </div>
             <div class="col-10">
-                <input type="text" class="form-control is-valid m-0" name="Tags" id="tags-input"
-                       placeholder="Tag1 Tag2" maxlength="200"
-                       title="latin, letter in tag required, 200 - max,  symbols allowed '-' '_', not empty" pattern="^(\s*[a-zA-Z]+[\w\-\d]*\s*)+$"
-                       required>
+                {{ form.tags }}
+<!--                <input type="text" class="form-control is-valid m-0" name="Tags" id="tags-input"-->
+<!--                       placeholder="Tag1 Tag2" maxlength="200"-->
+<!--                       title="latin, letter in tag required, 200 - max,  symbols allowed '-' '_', not empty" pattern="^(\s*[a-zA-Z]+[\w\-\d]*\s*)+$"-->
+<!--                       required>-->
             </div>
         </div>
-        <button class="btn my-btn link w-25 m-3 mx-auto border-3" type="submit">Ask!</button>
+        <div class="row mb-1 mx-auto">
+            <div class="text-white align-center">
+                {% for error in form.non_field_errors %}
+                    <p> {{ error }} </p>
+                {% endfor %}
+
+                {% for field in form %}
+                    {% if field.errors %}
+                        <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="text-center">
+            {% buttons %}
+                <button class="btn my-btn link w-25 m-3 mx-auto border-3" type="submit">Ask!</button>
+            {% endbuttons %}
+        </div>
     </form>
 {% endblock %}

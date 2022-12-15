@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} Question {% endblock %}
 {% load static %}
+{% load bootstrap4 %}
+
 {% block content %}
     <div class="no-border">
         {% include 'include/question_item.html' %}
@@ -14,11 +16,19 @@
     </div>
 
     <div class="m-20px">
-        <form class="was-validated">
-            <textarea rows="5" class="form-control m-0 is-invalid" id="input-answer" placeholder="enter your answer"
-                      title="the answer cant be empty"
-                      required></textarea>
-            <button class="btn my-btn link mt-2 mb-5 border-3" type="submit">Answer!</button>
+        <form class="was-validated" action="{{ question.get_url }}" method="post">
+            {% csrf_token %}
+            {{ ask_form.text }}
+<!--            <textarea rows="5" class="form-control m-0 is-invalid" id="input-answer" placeholder="enter your answer"-->
+<!--                      title="the answer cant be empty"-->
+<!--                      required></textarea>-->
+            {% if user.is_authenticated %}
+            {% buttons %}
+                <button class="btn my-btn link mt-2 mb-5 border-3" type="submit">Answer!</button>
+            {% endbuttons %}
+            {% else %}
+                <a type="button" class="btn my-btn link mt-2 mb-5 border-3" href="{% url 'login' %}">Login to answer</a>
+            {% endif %}
         </form>
     </div>
 {% endblock %}

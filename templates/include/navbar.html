@@ -5,7 +5,7 @@
             <a class="nav-link my-brand-text " href="{% url 'index' %}">AskVlasov</a>
         </div>
         <div class="col-4">
-            <form class="d-flex">
+            <form class="d-flex" >
                 <input class="form-control me-2 nav-link search font-20" maxlength="200" placeholder="Search"
                        name="search">
                 <button class="btn my-btn" type="submit">Search</button>
@@ -14,24 +14,24 @@
 
         {% if user.is_authenticated%}
             <div class="col-1 right">
-                <a class="btn my-btn border-2" type="submit" href="{% url 'ask' %}" >Ask!</a>
+                <a class="btn my-btn" type="submit" href="{% url 'ask' %}" >Ask!</a>
             </div>
             <div class="col-1 text-center ">
-                <img class="avatar" src="{% static "avatar/ava.png" %}">
+                <img class="avatar" src="{{ user.profile.avatar.url }}" alt="avatar">
             </div>
             <div class="col-2 font-20 nick">
-                {{ profile.user_id }}
+                {{ user.username }}
             </div>
             <div class=col-1>
                     <a class="settings nav-link font-20"  href="{% url 'settings' %}">settings</a>
             </div>
             <div class=col-1>
-                    <a class="logout nav-link font-20" href="{% url 'login' %}">log out</a>
+                    <a class="logout nav-link font-20" href="{% url 'logout' %}?next={{ redirect_after_logout }}">log out</a>
             </div>
         {% else %}
             <div class="col-2"></div>
             <div class="col-2">
-                <a type="button" class="btn my-btn" href="{% url 'login'  %}">login</a>
+                <a type="button" class="btn my-btn" href="{% url 'login'  %}?next={{ redirect_after_logout }}">login</a>
                 <a type="button" class="btn my-btn" href="{% url 'signup' %}">sign up</a>
             </div>
         {% endif %}
