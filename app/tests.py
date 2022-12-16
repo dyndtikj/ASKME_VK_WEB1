@@ -1,7 +1,7 @@
 from django.test import TestCase
 HELLO_WORLD = b"Hello world!\n"
 
-#  gunicorn --workers=2 tests:application
+# gunicorn -c ../gunicorn.conf.py tests:application
 
 def simple_app(environ, start_response):
     status = '200 OK'

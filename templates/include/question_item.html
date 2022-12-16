@@ -6,13 +6,16 @@
                 {{ question.profile_id}}
             </div>
             <div class="text-center ">
-                <img class="question-avatar" src={{ question.profile_id.avatar.url }} alt=avatar>
+                <img class="question-avatar" src="{{ MEDIA_URL }}{{ question.profile_id.avatar.url }}" alt=avatar>
             </div>
             <div class="like-dislike mx-auto align-center">
-                <div class="like-counter text-center ">{{ question.rating }}</div>
+                <div  id="rating-question-{{ question.id }}" class="like-counter text-center w-100 ">{{ question.rating }}</div>
+<!--                <div class="like-counter text-center ">{{ question.rating }}</div>-->
                 <div class="btn-group " role="group">
-                    <button type="button" class="btn my-btn border-2">+</button>
-                    <button type="button" class="btn my-btn border-2">-</button>
+                    <button id="like-question-{{ question.id }}" data-id="{{ question.id }}" type="button" class="btn my-btn border-2 js-vote-question">+</button>
+                    <button id="dislike-question-{{ question.id }}" data-id="{{ question.id }}" type="button" class="btn my-btn border-2 js-vote-question">-</button>
+<!--                    <button type="button" class="btn my-btn border-2">+</button>-->
+<!--                    <button type="button" class="btn my-btn border-2">-</button>-->
                 </div>
             </div>
         </div>

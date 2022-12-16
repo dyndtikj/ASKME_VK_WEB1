@@ -52,7 +52,7 @@
 <!--                <img class="question-avatar" src="{% static "img/ava.png" %}" alt=avatar>-->
         </div>
         <div class="text-center">
-                <img class="question-avatar" src="{{ user.profile.avatar.url }}" alt=avatar>
+                <img class="question-avatar" src="{{ MEDIA_URL }}{{ user.profile.avatar.url }}" alt=avatar>
         </div>
 <!--        <div class="row mt-3 mx-auto">-->
 <!--            <div class="form-row">-->

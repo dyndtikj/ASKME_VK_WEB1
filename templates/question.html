@@ -1,27 +1,22 @@
 {% extends 'base.html' %}
-{% block title %} Question {% endblock %}
-{% load static %}
 {% load bootstrap4 %}
-
+{% load static %}
+{% block title %} Question {% endblock %}
 {% block content %}
     <div class="no-border">
         {% include 'include/question_item.html' %}
     </div>
     <p><a id="answers"></a></p>
     <div class="answer-border">
-    {% for answer in answers %}
-        {% include 'include/answer.html' %}
-    {% endfor %}
-    {% include 'include/paginator.html' %}
+        {% for answer in answers %}
+            {% include 'include/answer.html' %}
+        {% endfor %}
+        {% include 'include/paginator.html' %}
     </div>
-
     <div class="m-20px">
         <form class="was-validated" action="{{ question.get_url }}" method="post">
             {% csrf_token %}
             {{ ask_form.text }}
-<!--            <textarea rows="5" class="form-control m-0 is-invalid" id="input-answer" placeholder="enter your answer"-->
-<!--                      title="the answer cant be empty"-->
-<!--                      required></textarea>-->
             {% if user.is_authenticated %}
             {% buttons %}
                 <button class="btn my-btn link mt-2 mb-5 border-3" type="submit">Answer!</button>

@@ -17,7 +17,7 @@
                 <a class="btn my-btn" type="submit" href="{% url 'ask' %}" >Ask!</a>
             </div>
             <div class="col-1 text-center ">
-                <img class="avatar" src="{{ user.profile.avatar.url }}" alt="avatar">
+                <img class="avatar" src="{{ MEDIA_URL }}{{ user.profile.avatar.url }}" alt="avatar">
             </div>
             <div class="col-2 font-20 nick">
                 {{ user.username }}
