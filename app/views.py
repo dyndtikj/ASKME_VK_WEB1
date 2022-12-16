@@ -11,6 +11,7 @@ from app.models import *
 
 best_members = Profile.objects.sample_profile(count=20)
 
+
 class HttpResponseAjax(JsonResponse):
     def __init__(self, status='ok', **kwargs):
         kwargs['status'] = status
@@ -35,6 +36,7 @@ def login_required_ajax(view):
             )
 
     return view2
+
 
 def paginate(objects_list, request, limit):
     paginator = Paginator(objects_list, limit)
