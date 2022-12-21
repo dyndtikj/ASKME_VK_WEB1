@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block title %} Question {% endblock %}
+{% block content %}
+    <div class="no-border">
+        {% include 'include/question_item.html' %}
+    </div>
+    <p><a id="answers"></a></p>
+    <div class="answer-border">
+        {% for answer in answers %}
+            {% include 'include/answer.html' %}
+        {% endfor %}
+        {% include 'include/paginator.html' %}
+    </div>
+    <div class="m-20px">
+        <form class="was-validated" action="{{ question.get_url }}" method="post">
+            {% csrf_token %}
+            {{ ask_form.text }}
+            {% if user.is_authenticated %}
+            {% buttons %}
+                <button class="btn my-btn link mt-2 mb-5 border-3" type="submit">Answer!</button>
+            {% endbuttons %}
+            {% else %}
+                <a type="button" class="btn my-btn link mt-2 mb-5 border-3" href="{% url 'login' %}">Login to answer</a>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

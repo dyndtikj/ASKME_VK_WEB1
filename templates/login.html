@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block title %} Login {% endblock %}
+{% block content %}
+    <h2 class="my-header">Log in</h2>
+    <form class="was-validated row question-form col-8 mx-auto" action="{% url 'login' %}?next={{ redirect_after_logout }}" method="post">
+        {% csrf_token %}
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+<!--                <input type="email" class="form-control" id="email-input" maxlength="100" placeholder="example@mail.ru"-->
+<!--                       name="email" required>-->
+<!--                <label for="email-input">Email address</label>-->
+                {{ form.username }}
+<!--                <div class="requirements">Invalid nickname. Example is "My_NiCkNaMe55".</div>-->
+                <label for="{{ form.username.id_for_label }}">Your nickname</label>
+            </div>
+        </div>
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+<!--                <input type="password" name="password" maxlength="100" class="form-control" id="password-input"-->
+<!--                       placeholder="Password" required pattern="^(?=.*\d)(?=.*[A-Z]).{6,}$">-->
+<!--                <label for="password-input">Password</label>-->
+                {{ form.password }}
+<!--                <div class="requirements">Invalid password. it must contain one upper and one lowercase letter and at-->
+<!--                    least one number and be 8-100 characters long <br> Example is "aA1fera**".-->
+
+                <label for="{{ form.password.id_for_label }}">Password</label>
+            </div>
+        </div>
+        <div class="row mt-3 mx-auto">
+            <div class="col-12 mx-auto form-floating">
+                <div class="error-msg text-end">
+                    {% for error in form.non_field_errors %}
+                        <p class="text-white align-center"> {{ error }} </p>
+                    {% endfor %}
+                </div>
+                {% buttons %}
+                    <button class="btn btn-success btn-lg" type="submit">Log in!</button>
+                {% endbuttons %}
+                <a class="registration_link align-center text-center" href="{% url 'signup' %}?next={{ redirect_after_logout }}">create new account </a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

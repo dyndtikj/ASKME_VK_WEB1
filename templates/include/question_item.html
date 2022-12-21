@@ -1,0 +1,42 @@
+{% load static %}
+<div class="question-preview">
+    <div class="row">
+        <div class="col-3">
+            <div class="my-header font-20">
+                {{ question.profile_id}}
+            </div>
+            <div class="text-center ">
+                <img class="question-avatar" src="{{ MEDIA_URL }}{{ question.profile_id.avatar.url }}" alt=avatar>
+            </div>
+            <div class="like-dislike mx-auto align-center">
+                <div  id="rating-question-{{ question.id }}" class="like-counter text-center w-100 ">{{ question.rating }}</div>
+<!--                <div class="like-counter text-center ">{{ question.rating }}</div>-->
+                <div class="btn-group " role="group">
+                    <button id="like-question-{{ question.id }}" data-id="{{ question.id }}" type="button" class="btn my-btn border-2 js-vote-question">+</button>
+                    <button id="dislike-question-{{ question.id }}" data-id="{{ question.id }}" type="button" class="btn my-btn border-2 js-vote-question">-</button>
+<!--                    <button type="button" class="btn my-btn border-2">+</button>-->
+<!--                    <button type="button" class="btn my-btn border-2">-</button>-->
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="question-header">
+                <a class="question-header" href="{% url 'question' question.id %}">{{ question.title }}</a>
+            </div>
+            <p class="question-text">
+                {{ question.text }}
+            </p>
+            <div class="row">
+                <div class="col-4 ms-0">
+                    <a class="font-20 link" href="{% url 'question' question.id %}#answers">answers({{ question.number_of_answers }})</a>
+                </div>
+                <div class="col-8 ms-0">
+                    <span class="tags-text">Tags:</span>
+                    {% for tag in question.tags.all|slice:":10" %}
+                        <a class="tags-text underline" href="{% url 'questions_by_tag' tag %}">{{ tag }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
